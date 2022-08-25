@@ -11,6 +11,6 @@ namespace Xamurai
 		{
 			BindingContext = new SampleViewModel();
 			InitializeComponent ();
-		}
-	}
+        }
+    }
 }

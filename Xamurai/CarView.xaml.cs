@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace Xamurai
 {
@@ -12,22 +13,30 @@ namespace Xamurai
 		public CarView ()
 		{
 			IsExpanded = true;
-			ToggleCollapseCommand = new DelegateCommand(ToggleCollapse);
 			InitializeComponent ();
 		}
+        double contentSize;
+        public ICommand ToggleCollapseCommand
+        {
+            get
+            {
 
-		private void ToggleCollapse()
-		{
-			//if (DeviceInfo.Platform == DevicePlatform.Android)
-			//{
-				//BUG iOS pre7+: doesn't collapse the section, only makes the label invisible
-				IsExpanded = !IsExpanded;
-				OnPropertyChanged(nameof(IsExpanded));
-			//}
-		}
+                return new Command(async a =>
+                {
+                    if (IsExpanded)
+                    {
+                        contentSize = this.Content.Height;
+                        await this.HeightTo(50, 250, null);
+                    }
+                    else
+                    {
+                        await this.HeightTo(contentSize, 250, null);
+                    }
+                    IsExpanded = !IsExpanded;
+                });
+            }
+        }
 
-		public ICommand ToggleCollapseCommand { get; }
-
-		public bool IsExpanded { get; set; }
+        public bool IsExpanded { get; set; }
 	}
 }

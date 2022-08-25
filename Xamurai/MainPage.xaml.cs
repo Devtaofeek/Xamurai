@@ -13,9 +13,9 @@ namespace Xamurai
 			OpenCarouselViewCommand = new DelegateCommand(OpenCarouselView);
 			OpenFlexLayoutViewCommand = new DelegateCommand(OpenFlexLayoutView);
 			OpenPagedCollectionViewCommand = new DelegateCommand(OpenPagedCollectionView);
-
 			BindingContext = this;
-			InitializeComponent();
+            DependencyService.Get<IStatusBar>().ShowStatusBar();
+            InitializeComponent();
 		}
 
 		public ICommand OpenListViewCommand { get; }
@@ -28,7 +28,11 @@ namespace Xamurai
 
 		public ICommand OpenFlexLayoutViewCommand { get; }
 
-		private void OpenListView()
+		public ICommand OpenMypageCollectionViewCommand { get; set; }
+
+
+
+        private void OpenListView()
 		{
 			Navigation.PushAsync(new ListViewPage());
 		}
@@ -52,7 +56,5 @@ namespace Xamurai
 		{
 			Navigation.PushAsync(new PagedCollectionPage());
 		}
-
-
-	}
+    }
 }

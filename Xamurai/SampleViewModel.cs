@@ -1,7 +1,9 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Xamurai
@@ -22,7 +24,27 @@ namespace Xamurai
 			set { SetProperty(ref _gridSpan, value); }
 		}
 
-		private void BuildCars()
+		public ICommand LongPressCommand
+        {
+            get
+            {
+                return new Command<Car>(async car =>
+                {
+					
+                    bool answer = await Application.Current.MainPage.DisplayAlert("Question?", "do you want to delete? ", "Yes", "No");
+					if (answer)
+                    {
+						Cars.Remove(car);
+                    }
+                    else
+                    {
+						return;
+                    }
+                });
+            }
+        }
+
+        private void BuildCars()
 		{
 			Cars = new ObservableCollection<Car>
 			{
@@ -44,7 +66,7 @@ namespace Xamurai
 				new Car { Abbreviation = "VW", Make=CarMake.VolksWagen, Name = "Polo", Description = "Some description", Color = Color.PaleTurquoise },
 				new Car { Abbreviation = "VW", Make=CarMake.VolksWagen, Name = "Polo", Description = "Some description", Color = Color.Purple },
 
-			};
+            };
 		}
 
 		private ObservableCollection<Car> _cars;

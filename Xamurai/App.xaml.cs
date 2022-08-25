@@ -1,6 +1,7 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+[assembly: ExportFont("OpenSansRegular.ttf", Alias = "OpenSans")]
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Xamurai
 {
@@ -11,7 +12,7 @@ namespace Xamurai
 			InitializeComponent();
 
 			MainPage = new NavigationPage(new MainPage());
-		}
+        }
 
 		protected override void OnStart()
 		{

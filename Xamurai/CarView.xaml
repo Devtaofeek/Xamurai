@@ -6,22 +6,23 @@
              x:Name="_carView"
              BackgroundColor="White">
 	<ContentView.Content>
-		<Grid>
+		<Grid x:Name="myGrid">
 			<Frame Margin="5,15,5,5"
 			       BorderColor="LightGray"
 			       CornerRadius="5"
 			       HasShadow="False">
 				<Grid>
 					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
+						<RowDefinition Height="auto" />
 					</Grid.RowDefinitions>
-					<Grid IsVisible="{Binding IsExpanded, Source={x:Reference _carView}}">
+					<Grid>
 						<Grid.RowDefinitions>
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="*" />
 						</Grid.RowDefinitions>
 						<Label HorizontalOptions="End"
 						       Text="{Binding Notes}"
+			 FontFamily="OpenSans"
 						       TextColor="Gray" />
 						<Label Grid.Row="1" Text="{Binding Description}" />
 					</Grid>

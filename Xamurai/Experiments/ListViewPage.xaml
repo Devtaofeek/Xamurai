@@ -3,27 +3,81 @@
              xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Xamurai"
-             Title="List View">
-	<ContentPage.Content>
+			xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             Title="ListView">
+	<ContentPage.Resources>
+		<DataTemplate x:Key="MercedesView">
+			<ViewCell>
+				<SwipeView>
+					 <SwipeView.LeftItems>
+        <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close">
+            <SwipeItem Text="Delete"
+					   IsDestructive="True"
+                       BackgroundColor="Red"
+					   Clicked="SwipeItem_Clicked"
+					/>
+        </SwipeItems>
+    </SwipeView.LeftItems>
+				<local:MercedesView/>
+				</SwipeView>
+			</ViewCell>
+		</DataTemplate>
+		<DataTemplate x:Key="CarView">
+			<ViewCell>
+				<SwipeView>
+					 <SwipeView.LeftItems>
+        <SwipeItems Mode="Execute" SwipeBehaviorOnInvoked="Close"> 
+            <SwipeItem Text="Delete"
+					   Clicked="SwipeItem_Clicked"
+                       BackgroundColor="Red"
+					   IsDestructive="True"
+					/>
+        </SwipeItems>
+    </SwipeView.LeftItems>
+				<local:CarView/>
+				</SwipeView>
+			</ViewCell>
+		</DataTemplate>
+		<local:CarDataTemplateSelector
+			x:Key="CarSelector"
+			CarView="{StaticResource CarView}"
+			MercedesView="{StaticResource MercedesView}"/>
 
-		<Grid>
+		<DataTemplate x:Key="MView">
+			<local:MercedesView
+				xct:TouchEffect.LongPressCommand="{Binding BindingContext.LongPressCommand, Source={Reference CarList}}"
+				xct:TouchEffect.LongPressCommandParameter="{Binding .}"/>
+		</DataTemplate>
+		<DataTemplate x:Key="CView">
+			<local:CarView xct:TouchEffect.LongPressCommand="{Binding BindingContext.LongPressCommand, Source={Reference CarList}}"
+				xct:TouchEffect.LongPressCommandParameter="{Binding .}"/>
+		</DataTemplate>
+		<local:HorizontalListViewTemplateSelector
+			x:Key="HorizontalListSelector"
+			CarTemplate="{StaticResource CView}"
+			MercedesTemplate="{StaticResource MView}"/>
+	</ContentPage.Resources>
+	<ContentPage.Content>
+		<Grid Padding="5">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
-				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
-			<ListView Grid.Row="1"
-			          HasUnevenRows="True"
-			          ItemsSource="{Binding Cars}"
-			          SelectionMode="None"
-			          SeparatorVisibility="None">
-				<ListView.ItemTemplate>
-					<DataTemplate>
-						<ViewCell>
-							<local:CarView Padding="0,10,0,0" />
-						</ViewCell>
-					</DataTemplate>
-				</ListView.ItemTemplate>
+			<ListView  x:Name="CarList"
+			 HasUnevenRows="True"
+			 SelectionMode="None"
+			 ItemsSource="{Binding Cars}"
+			 SeparatorVisibility="None"
+			 ItemTemplate="{StaticResource CarSelector}">
 			</ListView>
+
+			<ScrollView Orientation="Horizontal"
+				x:Name="HorizontalList">
+				<FlexLayout
+				Direction="Row"
+				BindableLayout.ItemTemplateSelector="{StaticResource HorizontalListSelector}"
+				BindableLayout.ItemsSource="{Binding Cars}">
+			</FlexLayout>
+			</ScrollView>
 		</Grid>
 	</ContentPage.Content>
 </ContentPage>
